@@ -205,11 +205,13 @@ func (c *TwitchClient) Request(method string, path string, params *url.Values, b
 
 	var bb *bytes.Buffer
 	if body != nil {
-		jsonParams, err := json.Marshal(body)
+		bb = bytes.NewBuffer(nil)
+		enc := json.NewEncoder(bb)
+		enc.SetEscapeHTML(false)
+		err := enc.Encode(body)
 		if err != nil {
 			return nil, nil, err
 		}
-		bb = bytes.NewBuffer(jsonParams)
 	} else {
 		bb = bytes.NewBuffer(nil)
 	}
