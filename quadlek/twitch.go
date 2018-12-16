@@ -27,8 +27,8 @@ type TwitchFollow struct {
 	user   *libtwitch.User
 	stream *libtwitch.Stream
 
-	streamWatcher *libtwitch.StreamWatcher
-	followWatcher *libtwitch.StreamWatcher
+	streamWatcher libtwitch.Watcher
+	followWatcher libtwitch.Watcher
 }
 
 var twitchClient *libtwitch.TwitchClient
@@ -115,6 +115,9 @@ func twitchCommand(ctx context.Context, cmdChannel <-chan *quadlek.CommandMsg) {
 }
 
 func watch(bot *quadlek.Bot, follow *TwitchFollow) {
+	if follow.streamWatcher == nil {
+		follow.s
+	}
 
 	for {
 		select {
@@ -184,6 +187,8 @@ func load(ctx context.Context, follows []*TwitchFollow) func(bot *quadlek.Bot, s
 					continue
 				}
 				follow.streamWatcher = sw
+			} else {
+				follow.streamWatcher = &libtwitch.NilStreamWatcher{}
 			}
 
 			// (optionally) Start following follow events
@@ -195,6 +200,8 @@ func load(ctx context.Context, follows []*TwitchFollow) func(bot *quadlek.Bot, s
 					continue
 				}
 				follow.followWatcher = sw
+			} else {
+				follow.followWatcher = &libtwitch.NilStreamWatcher{}
 			}
 
 			go watch(bot, follow)
