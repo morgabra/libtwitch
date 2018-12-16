@@ -175,6 +175,12 @@ func (c *TwitchClient) WebhookHandler() http.HandlerFunc {
 	}
 }
 
+type Watcher interface {
+	Streams() <-chan *Stream
+	Follows() <-chan *Follow
+	Close()
+}
+
 type StreamWatcher struct {
 	ctx    context.Context
 	cancel context.CancelFunc
@@ -331,4 +337,17 @@ func (c *TwitchClient) WatchStream(userID string) (*StreamWatcher, error) {
 
 func (c *TwitchClient) WatchFollows(userID string) (*StreamWatcher, error) {
 	return c.addStreamWatcher("follows", userID)
+}
+
+type NilStreamWatcher struct {}
+
+func (NilStreamWatcher) Streams() <-chan *Stream {
+	return make(<-chan *Stream)
+}
+
+func (NilStreamWatcher) Follows() <-chan *Follow {
+	return make(<-chan *Follow)
+}
+
+func (NilStreamWatcher) Close() {
 }
