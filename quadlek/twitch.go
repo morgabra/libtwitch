@@ -115,10 +115,6 @@ func twitchCommand(ctx context.Context, cmdChannel <-chan *quadlek.CommandMsg) {
 }
 
 func watch(bot *quadlek.Bot, follow *TwitchFollow) {
-	if follow.streamWatcher == nil {
-		follow.s
-	}
-
 	for {
 		select {
 		case <-follow.ctx.Done():
