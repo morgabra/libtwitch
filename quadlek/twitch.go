@@ -9,7 +9,7 @@ import (
 
 	"fmt"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/jirwin/quadlek/quadlek"
 	"github.com/morgabra/libtwitch"
 )
